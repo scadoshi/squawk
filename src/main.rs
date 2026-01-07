@@ -1,10 +1,24 @@
-const INPUT: [u8; 31] = [
-    35, 44, 47, 36, 33, 13, 44, 36, 63, 62, 61, 44, 46, 40, 96, 36, 35, 57, 40, 33, 33, 36, 42, 40,
-    35, 46, 40, 99, 46, 34, 32,
-];
+const SQUAWK: u8 = 77;
 
-const SQUAWK: u32 = 7700;
+pub trait Decode<T> {
+    fn decode(self) -> T;
+}
+
+impl Decode<char> for u8 {
+    fn decode(self) -> char {
+        char::from(self ^ SQUAWK)
+    }
+}
+
+impl<I: Iterator<Item = u8>> Decode<String> for I {
+    fn decode(self) -> String {
+        self.map(|x| x.decode()).collect()
+    }
+}
 
 fn main() {
-    println!("Hello, world!");
+    let input = include_str!("input.txt")
+        .split(',')
+        .map(|x| x.trim().parse::<u8>().unwrap());
+    println!("{}", input.decode());
 }
