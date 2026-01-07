@@ -10,9 +10,9 @@ impl Decode<char> for u8 {
     }
 }
 
-impl<I: Iterator<Item = u8>> Decode<String> for I {
+impl<I: IntoIterator<Item = u8>> Decode<String> for I {
     fn decode(self) -> String {
-        self.map(|x| x.decode()).collect()
+        self.into_iter().map(|x| x.decode()).collect()
     }
 }
 
